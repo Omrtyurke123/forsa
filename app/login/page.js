@@ -1,13 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { supabaseBrowser } from "@/lib/supabaseBrowser";
 
-export default function LoginPage() {
+function LoginForm() {
   const router = useRouter();
   const params = useSearchParams();
-  const supabase = supabaseBrowser();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -19,6 +18,8 @@ export default function LoginPage() {
     setError("");
     setLoading(true);
 
+    // الـ client بيتعمل هنا بس (في المتصفح، بعد الضغط) مش وقت الـ render
+    const supabase = supabaseBrowser();
     const { error: signInError } = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -79,5 +80,13 @@ export default function LoginPage() {
         </a>
       </p>
     </main>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={null}>
+      <LoginForm />
+    </Suspense>
   );
 }
