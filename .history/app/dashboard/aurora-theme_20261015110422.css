@@ -1,0 +1,111 @@
+/* الوضع الافتراضي "simple" من غير أي تغيير — كل القواعد هنا
+   مربوطة بـ [data-theme="aurora"] فمش بتأثر غير لما المستخدم
+   يفعّل وضع "them" */
+
+[data-theme="aurora"] {
+  --nx-bg: #0a0a0a;
+  --nx-card: #181818;
+  --nx-card-hover: #222222;
+  --nx-border: #2a2a2a;
+  --nx-red: #e50914;
+  --nx-lime: #c6ff00;
+  --nx-text: #ffffff;
+  --nx-muted: #a3a3a3;
+
+  position: relative;
+  border-radius: 1rem;
+  background: var(--nx-bg);
+  padding: 1.5rem;
+  overflow: hidden;
+}
+
+[data-theme="aurora"]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at top right, rgba(229, 9, 20, 0.12), transparent 55%),
+    radial-gradient(ellipse at bottom left, rgba(198, 255, 0, 0.08), transparent 55%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+[data-theme="aurora"] > * {
+  position: relative;
+  z-index: 1;
+}
+
+[data-theme="aurora"] h1,
+[data-theme="aurora"] h2,
+[data-theme="aurora"] h3 {
+  color: var(--nx-text);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+[data-theme="aurora"] p,
+[data-theme="aurora"] span,
+[data-theme="aurora"] a {
+  color: var(--nx-text);
+}
+
+[data-theme="aurora"] .bg-panel {
+  background: var(--nx-card);
+  border-color: var(--nx-border);
+  box-shadow: none;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+[data-theme="aurora"] .bg-panel:hover {
+  background: var(--nx-card-hover);
+  border-color: var(--nx-lime);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(198, 255, 0, 0.3);
+  transform: scale(1.015);
+}
+
+[data-theme="aurora"] .border-line {
+  border-color: var(--nx-border);
+}
+
+[data-theme="aurora"] [class*="border-"] {
+  border-color: var(--nx-lime);
+}
+
+[data-theme="aurora"] .text-muted {
+  color: var(--nx-muted);
+}
+
+/* زرار "اشترك الآن" — ستايل inDrive: أخضر-ليموني جريء، بيل شكل */
+[data-theme="aurora"] .bg-gold {
+  background: var(--nx-lime);
+  color: #0a0a0a;
+  font-weight: 800;
+  border: none;
+  border-radius: 9999px;
+  box-shadow: 0 0 20px rgba(198, 255, 0, 0.35);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+[data-theme="aurora"] .bg-gold:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 30px rgba(198, 255, 0, 0.55);
+}
+
+/* روابط "جدّد اشتراكك" ونحوها — أحمر نتفليكس جريء */
+[data-theme="aurora"] .text-teal {
+  color: var(--nx-red);
+  font-weight: 800;
+}
+
+[data-theme="aurora"] .theme-toggle-btn {
+  background: #141414;
+  color: var(--nx-lime);
+  border-color: var(--nx-lime);
+  border-radius: 9999px;
+  font-weight: 800;
+}
+
+[data-theme="aurora"] .theme-toggle-btn:hover {
+  background: var(--nx-lime);
+  color: #0a0a0a;
+}

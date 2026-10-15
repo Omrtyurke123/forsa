@@ -1,0 +1,115 @@
+/* الوضع الافتراضي "simple" من غير أي تغيير — كل القواعد هنا
+   مربوطة بـ [data-theme="aurora"] فمش بتأثر غير لما المستخدم
+   يفعّل وضع "them" */
+
+[data-theme="aurora"] {
+  --ios-bg: #e4e5ea;
+  --ios-glass: rgba(255, 255, 255, 0.55);
+  --ios-glass-hover: rgba(255, 255, 255, 0.7);
+  --ios-border: rgba(255, 255, 255, 0.6);
+  --ios-text: #1d1d1f;
+  --ios-muted: #6e6e73;
+  --ios-blue: #0a84ff;
+
+  position: relative;
+  border-radius: 1.25rem;
+  background: var(--ios-bg);
+  padding: 1.5rem;
+  overflow: hidden;
+}
+
+[data-theme="aurora"]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 15% 20%, rgba(10, 132, 255, 0.14), transparent 45%),
+    radial-gradient(circle at 85% 15%, rgba(191, 90, 242, 0.12), transparent 45%),
+    radial-gradient(circle at 50% 90%, rgba(255, 149, 0, 0.10), transparent 50%);
+  filter: blur(50px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+[data-theme="aurora"] > * {
+  position: relative;
+  z-index: 1;
+}
+
+[data-theme="aurora"] h1,
+[data-theme="aurora"] h2,
+[data-theme="aurora"] h3 {
+  color: var(--ios-text);
+  font-weight: 700;
+  letter-spacing: -0.015em;
+}
+
+[data-theme="aurora"] p,
+[data-theme="aurora"] span,
+[data-theme="aurora"] a {
+  color: var(--ios-text);
+}
+
+[data-theme="aurora"] .bg-panel {
+  background: var(--ios-glass);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid var(--ios-border);
+  border-radius: 1.1rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  transition: background 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+[data-theme="aurora"] .bg-panel:hover {
+  background: var(--ios-glass-hover);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+[data-theme="aurora"] .border-line {
+  border-color: var(--ios-border);
+}
+
+[data-theme="aurora"] [class*="border-"] {
+  border-color: rgba(10, 132, 255, 0.4);
+}
+
+[data-theme="aurora"] .text-muted {
+  color: var(--ios-muted);
+}
+
+/* زرار "اشترك الآن" — أزرق نظام آبل، بيل شكل، زجاجي خفيف */
+[data-theme="aurora"] .bg-gold {
+  background: var(--ios-blue);
+  color: #ffffff;
+  font-weight: 700;
+  border: none;
+  border-radius: 9999px;
+  box-shadow: 0 4px 16px rgba(10, 132, 255, 0.35);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+[data-theme="aurora"] .bg-gold:hover {
+  transform: scale(1.04);
+  box-shadow: 0 6px 22px rgba(10, 132, 255, 0.5);
+}
+
+/* روابط "جدّد اشتراكك" ونحوها — نفس أزرق آبل */
+[data-theme="aurora"] .text-teal {
+  color: var(--ios-blue);
+  font-weight: 700;
+}
+
+[data-theme="aurora"] .theme-toggle-btn {
+  background: var(--ios-glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  color: var(--ios-blue);
+  border-color: var(--ios-border);
+  border-radius: 9999px;
+  font-weight: 700;
+}
+
+[data-theme="aurora"] .theme-toggle-btn:hover {
+  background: var(--ios-glass-hover);
+}
