@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
 import { supabaseServer, supabaseAdmin } from "@/lib/supabaseServer";
 
+const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
+const ALLOWED_EXT = ["jpg", "jpeg", "png", "webp"];
+const MAX_SIZE = 5 * 1024 * 1024; // 5MB
+
 export async function POST(request) {
   const supabase = supabaseServer();
 
@@ -23,9 +27,23 @@ export async function POST(request) {
     return NextResponse.json({ error: "بيانات ناقصة" }, { status: 400 });
   }
 
+  if (!["vodafone_cash", "instapay"].includes(method)) {
+    return NextResponse.json({ error: "طريقة دفع غير صالحة" }, { status: 400 });
+  }
+
+  // تحقق من نوع وحجم الملف — قبل أي رفع
+  if (!ALLOWED_TYPES.includes(file.type)) {
+    return NextResponse.json({ error: "الملف لازم يكون صورة (jpg/png/webp)" }, { status: 400 });
+  }
+  if (file.size > MAX_SIZE) {
+    return NextResponse.json({ error: "حجم الصورة أكبر من 5 ميجا" }, { status: 400 });
+  }
+
   const admin = supabaseAdmin();
 
-  const ext = file.name?.split(".").pop() || "jpg";
+  // استخرج الامتداد من نوع MIME الحقيقي، مش من اسم الملف (اسم الملف غير موثوق)
+  const extFromType = { "image/jpeg": "jpg", "image/png": "png", "image/webp": "webp" };
+  const ext = extFromType[file.type];
   const path = `${user.id}/${Date.now()}.${ext}`;
 
   const { error: uploadError } = await admin.storage
@@ -33,9 +51,13 @@ export async function POST(request) {
     .upload(path, file, { contentType: file.type });
 
   if (uploadError) {
-    return NextResponse.json({ error: uploadError.message }, { status: 500 });
-  }
+  console.error("upload error:", uploadError);
+  return NextResponse.json({ error: "حصل خطأ في رفع الصورة، حاول تاني" }, { status: 500 });
+}
 
+  // status ثابتة 'pending' هنا أصلًا (الافتراضي في الجدول) — لكن لازم
+  // تتأكد إن سياسة RLS "payments_insert_own" بقت فيها with check (status = 'pending')
+  // زي ما اتفقنا، عشان حتى لو حد حاول يبعت insert مباشر من المتصفح يتمنع
   const { error: insertError } = await supabase.from("payments").insert({
     user_id: user.id,
     plan_id: planId || null,
@@ -46,8 +68,9 @@ export async function POST(request) {
   });
 
   if (insertError) {
-    return NextResponse.json({ error: insertError.message }, { status: 500 });
-  }
+  console.error("insert payment error:", insertError);
+  return NextResponse.json({ error: "حصل خطأ في حفظ الطلب، حاول تاني" }, { status: 500 });
+}
 
   return NextResponse.json({ ok: true });
 }

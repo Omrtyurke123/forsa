@@ -2,6 +2,9 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse } from "next/server";
 
 export async function middleware(request) {
+  if (request.headers.get("x-middleware-subrequest")) {
+    return new NextResponse("Forbidden", { status: 403 });
+  }
   let response = NextResponse.next({ request });
 
   const supabase = createServerClient(
@@ -36,6 +39,21 @@ export async function middleware(request) {
     url.pathname = "/login";
     url.searchParams.set("next", request.nextUrl.pathname);
     return NextResponse.redirect(url);
+  }
+
+  // جديد: لو المسار /admin، لازم نتأكد إن المستخدم فعلاً is_admin
+  if (request.nextUrl.pathname.startsWith("/admin") && user) {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("is_admin")
+      .eq("id", user.id)
+      .single();
+
+    if (!profile?.is_admin) {
+      const url = request.nextUrl.clone();
+      url.pathname = "/dashboard";
+      return NextResponse.redirect(url);
+    }
   }
 
   return response;

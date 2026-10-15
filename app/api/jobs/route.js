@@ -52,8 +52,9 @@ export async function GET(request) {
   const { data: jobs, error } = await query;
 
   if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
-  }
+  console.error("jobs fetch error:", error);
+  return NextResponse.json({ error: "حصل خطأ، حاول تاني" }, { status: 500 });
+}
 
   // لو مفيش اشتراك/تجربة سارية: نبعت المعاينة بس من غير تفاصيل حساسة
   const payload = access

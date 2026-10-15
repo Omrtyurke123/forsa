@@ -32,7 +32,12 @@ function LoginForm() {
       return;
     }
 
-    router.push(params.get("next") || "/dashboard");
+    const nextParam = params.get("next");
+    const safeNext =
+      nextParam && nextParam.startsWith("/") && !nextParam.startsWith("//")
+        ? nextParam
+        : "/dashboard";
+    router.push(safeNext);
     router.refresh();
   }
 
