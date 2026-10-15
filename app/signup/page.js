@@ -50,7 +50,7 @@ export default function SignupPage() {
         <h1 className="font-display font-bold text-2xl mb-2">تحقق من إيميلك</h1>
         <p className="text-muted leading-relaxed">
           بعتنالك رسالة تأكيد على <b dir="ltr">{email}</b>. افتح الرسالة ودوس على
-          لينك التأكيد عشان تفعّل حسابك وتبدأ تجربتك المجانية.
+          لينك التأكيد عشان تفعّل حسابك وتبدأ تجربتك المجانية.<a href="https://forsa7.vercel.app/login">تسجيل الدخول</a>
         </p>
         <p className="text-sm text-muted mt-6">
           مش لاقي الرسالة؟ تأكد من الـ Spam، أو{" "}
