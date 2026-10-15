@@ -14,13 +14,14 @@ export default function SignupPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [awaitingConfirmation, setAwaitingConfirmation] = useState(false);
 
   async function handleSubmit(e) {
     e.preventDefault();
     setError("");
     setLoading(true);
 
-    const { error: signUpError } = await supabase.auth.signUp({
+    const { data, error: signUpError } = await supabase.auth.signUp({
       email,
       password,
       options: { data: { full_name: fullName, phone } },
@@ -29,15 +30,39 @@ export default function SignupPage() {
     setLoading(false);
 
     if (signUpError) {
-      setError(
-        signUpError.message.includes("already registered")
-          ? "الإيميل ده مسجّل قبل كده."
-          : "حصل خطأ، جرّب تاني."
-      );
+      setError("مش قادرين نكمل التسجيل بالبيانات دي، تأكد من الإيميل أو جرّب تاني.");
       return;
     }
 
-    router.push("/dashboard");
+    // لو فيه session يبقى التأكيد مش مفعّل (أو الحساب موجود ومتأكد بالفعل) — روح على طول
+    if (data.session) {
+      router.push("/dashboard");
+      return;
+    }
+
+    // لو مفيش session، يبقى التأكيد مفعّل وبعتنالهم إيميل
+    setAwaitingConfirmation(true);
+  }
+
+  if (awaitingConfirmation) {
+    return (
+      <main className="max-w-sm mx-auto px-6 py-16 text-center">
+        <h1 className="font-display font-bold text-2xl mb-2">تحقق من إيميلك</h1>
+        <p className="text-muted leading-relaxed">
+          بعتنالك رسالة تأكيد على <b dir="ltr">{email}</b>. افتح الرسالة ودوس على
+          لينك التأكيد عشان تفعّل حسابك وتبدأ تجربتك المجانية.
+        </p>
+        <p className="text-sm text-muted mt-6">
+          مش لاقي الرسالة؟ تأكد من الـ Spam، أو{" "}
+          <button
+            onClick={() => setAwaitingConfirmation(false)}
+            className="text-teal font-bold underline"
+          >
+            جرّب تاني
+          </button>
+        </p>
+      </main>
+    );
   }
 
   return (
