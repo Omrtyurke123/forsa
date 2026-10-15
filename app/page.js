@@ -9,6 +9,11 @@ const sections = [
   { name: "مستقل", desc: "كل مشروع جديد يُنشر، لحظة بلحظة.", color: "bg-mostaql" },
   { name: "خمسات", desc: "كل طلب جديد يُنشر، لحظة بلحظة.", color: "bg-khamsat" },
   { name: "نفذلي", desc: "كل مشروع جديد يُنشر، لحظة بلحظة.", color: "bg-nafezly" },
+  {
+    name: "جروبات تليجرام",
+    desc:"للوظائف بتوصلك اشعارات من خلال انضمامك في مجموعات تلجرام",
+    color: "bg-[#229ED9]",
+  },
 ];
 
 export default function Home() {
@@ -46,7 +51,7 @@ export default function Home() {
       </section>
 
       <section className="max-w-5xl mx-auto px-6 pb-20">
-        <div className="grid md:grid-cols-4 gap-px bg-line border border-line rounded-sm overflow-hidden">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-px bg-line border border-line rounded-sm overflow-hidden">
           {sections.map((s) => (
             <div key={s.name} className="bg-panel p-5">
               <span className={`inline-block w-2 h-2 rounded-full ${s.color} mb-3`} />

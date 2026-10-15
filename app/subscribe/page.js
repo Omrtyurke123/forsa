@@ -42,11 +42,11 @@ export default function SubscribePage() {
   return (
     <main className="max-w-md mx-auto px-6 py-16">
       <h1 className="font-display font-bold text-2xl mb-1">الاشتراك الشهري</h1>
-      <p className="text-muted text-sm mb-8">99 جنيه / شهر — إلغاء في أي وقت.</p>
+      <p className="text-muted text-sm mb-8">25 جنيه / شهر .</p>
 
       <div className="bg-panel border border-line rounded-sm p-4 mb-6 text-sm leading-relaxed">
         <p className="font-bold mb-1">حوّل المبلغ على:</p>
-        <p>فودافون كاش / انستاباي: <b dir="ltr">01xxxxxxxxx</b></p>
+        <p>انستاباي: <b dir="ltr">01144842231</b></p>
         <p className="text-muted mt-2">
           بعد التحويل، املأ البيانات تحت وارفع صورة إيصال التحويل.
         </p>
@@ -60,7 +60,7 @@ export default function SubscribePage() {
             onChange={(e) => setMethod(e.target.value)}
             className="w-full border border-line rounded-sm px-3 py-2 bg-panel"
           >
-            <option value="vodafone_cash">فودافون كاش</option>
+            {/* <option value="vodafone_cash">فودافون كاش</option> */}
             <option value="instapay">انستاباي</option>
           </select>
         </label>

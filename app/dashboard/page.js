@@ -3,7 +3,15 @@ import { redirect } from "next/navigation";
 import JobsFeed from "./JobsFeed";
 import SignOutButton from "./SignOutButton";
 import ThemeProvider, { ThemeToggleButton } from "./ThemeProvider";
+import TelegramGroups from "./TelegramGroups";
 import "./aurora-theme.css";
+
+const TELEGRAM_GROUPS = [
+  { label: "جروب أقل عروض", url: "https://t.me/+xxxxxxxxxxxxx" },
+  { label: "جروب مستقل", url: "https://t.me/+xxxxxxxxxxxxx" },
+  { label: "جروب خمسات", url: "https://t.me/+xxxxxxxxxxxxx" },
+  { label: "جروب نفذلي", url: "https://t.me/+xxxxxxxxxxxxx" },
+];
 
 export default async function DashboardPage() {
   const supabase = supabaseServer();
@@ -19,6 +27,8 @@ export default async function DashboardPage() {
     .select("*")
     .eq("id", user.id)
     .single();
+
+  if (!profile) redirect("/login");
 
   const trialEnds = new Date(profile.trial_started_at);
   trialEnds.setDate(trialEnds.getDate() + (profile.trial_days ?? 3));
@@ -66,13 +76,10 @@ export default async function DashboardPage() {
         </header>
 
         {subActive && (
-          <div className="bg-panel border border-line rounded-sm px-4 py-3 mb-6 text-sm">
-            اشتراكك فعّال لحد{" "}
-            <b>
-              {new Date(profile.subscription_expires_at).toLocaleDateString("ar-EG")}
-            </b>
-            .
-          </div>
+          <TelegramGroups
+            expiresLabel={new Date(profile.subscription_expires_at).toLocaleDateString("ar-EG")}
+            groups={TELEGRAM_GROUPS}
+          />
         )}
 
         {!subActive && hadSubscriptionBefore && (
