@@ -8,6 +8,7 @@ const TABS = [
   { key: "instant", label: "خمسات", source: "خمسات", accent: "border-khamsat" },
   { key: "instant", label: "نفذلي", source: "نفذلي", accent: "border-nafezly" },
   { key: "instant", label: "كفيل", source: "كفيل", accent: "border-kafiil" },
+  { key: "low_offers", label: "متعاون", source: "متعاون", accent: "border-ink" },
 ];
 
 export default function JobsFeed() {
