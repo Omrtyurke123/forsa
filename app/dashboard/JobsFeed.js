@@ -105,14 +105,13 @@ function LowOffersCard({ job }) {
 }
 
 function InstantCard({ job }) {
-  // الرابط متضاف آخر سطر في النص (شايفه extract_bot عند الحفظ)
+  // الرابط متضاف آخر سطر في النص — بنستخدمه للفتح بس، ومبنعرضوش كنص
   const match = job.raw_text?.match(/https?:\/\/\S+$/);
   const url = match?.[0];
+  const text = job.raw_text?.replace(/\n*https?:\/\/\S+\s*$/, "").trim();
 
   const content = (
-    <div className="whitespace-pre-line text-sm leading-relaxed">
-      {job.raw_text}
-    </div>
+    <div className="whitespace-pre-line text-sm leading-relaxed">{text}</div>
   );
 
   if (!url) {

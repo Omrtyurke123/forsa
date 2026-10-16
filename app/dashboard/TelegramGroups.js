@@ -7,7 +7,7 @@ export default function TelegramGroups({ expiresLabel, groups }) {
 
   return (
     <div className="bg-panel border border-line rounded-sm mb-6 overflow-hidden">
-      <button
+      {/* <button
         onClick={() => setOpen((v) => !v)}
         className="flex items-center justify-between w-full px-4 py-4 hover:bg-line/30 transition"
       >
@@ -25,7 +25,7 @@ export default function TelegramGroups({ expiresLabel, groups }) {
             ▾
           </span>
         </span>
-      </button>
+      </button> */}
 
       {open && (
         <div className="px-4 pb-4">

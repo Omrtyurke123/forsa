@@ -17,6 +17,15 @@ export const metadata = {
   title: "فرصة — وظائف العمل الحر في مكان واحد",
   description:
     "وظائف البرمجة والتصميم من مستقل وخمسات ونفذلي، مرتبة ولحظية، في مكان واحد.",
+  manifest: "/manifest.json",
+  icons: {
+    icon: "/icon-192.png",
+    apple: "/icon-192.png",
+  },
+};
+
+export const viewport = {
+  themeColor: "#111111",
 };
 
 export default function RootLayout({ children }) {

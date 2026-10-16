@@ -1,4 +1,5 @@
 import Link from "next/link";
+import InstallButton from "./InstallButton";
 
 const sections = [
   {
@@ -11,7 +12,7 @@ const sections = [
   { name: "نفذلي", desc: "كل مشروع جديد يُنشر، لحظة بلحظة.", color: "bg-nafezly" },
   {
     name: "جروبات تليجرام",
-    desc:"للوظائف بتوصلك اشعارات من خلال انضمامك في مجموعات تلجرام",
+    desc: "للوظائف بتوصلك اشعارات من خلال انضمامك في مجموعات تلجرام",
     color: "bg-[#229ED9]",
   },
 ];
@@ -36,22 +37,25 @@ export default function Home() {
 
       <section className="max-w-5xl mx-auto px-6 pt-10 pb-16">
         <h1 className="font-display font-bold text-4xl md:text-5xl leading-[1.3] max-w-2xl">
-          كل فرص العمل الحر المصرية، في مكان واحد، قبل ما حد تاني يشوفها.
+          كل فرص العمل الحر في مكان واحد، قبل ما حد تاني يشوفها.
         </h1>
         <p className="mt-5 text-lg text-muted max-w-xl leading-relaxed">
           فرصة بتجمعلك مشاريع مستقل وخمسات ونفذلي أول ما تتنشر، وبترتب لك
           الأقل منافسة منها، عشان تقدّم بسرعة وتكسب أكتر.
         </p>
-        <Link
-          href="/signup"
-          className="inline-block mt-8 bg-gold text-ink font-bold px-6 py-3 rounded-sm hover:brightness-95 transition"
-        >
-          جرّب مجانًا 3 أيام
-        </Link>
+        <div className="flex flex-wrap items-center gap-3 mt-8">
+          <Link
+            href="/signup"
+            className="inline-block bg-gold text-ink font-bold px-6 py-3 rounded-sm hover:brightness-95 transition"
+          >
+            جرّب مجانًا 3 أيام
+          </Link>
+          <InstallButton />
+        </div>
       </section>
 
       <section className="max-w-5xl mx-auto px-6 pb-20">
-        <div className="grid md:grid-cols-4 gap-px bg-line border border-line rounded-sm overflow-hidden">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-px bg-line border border-line rounded-sm overflow-hidden">
           {sections.map((s) => (
             <div key={s.name} className="bg-panel p-5">
               <span className={`inline-block w-2 h-2 rounded-full ${s.color} mb-3`} />
