@@ -10,11 +10,11 @@ const sections = [
   { name: "مستقل", desc: "كل مشروع جديد يُنشر، لحظة بلحظة.", color: "bg-mostaql" },
   { name: "خمسات", desc: "كل طلب جديد يُنشر، لحظة بلحظة.", color: "bg-khamsat" },
   { name: "نفذلي", desc: "كل مشروع جديد يُنشر، لحظة بلحظة.", color: "bg-nafezly" },
-  {
-    name: "جروبات تليجرام",
-    desc: "للوظائف بتوصلك اشعارات من خلال انضمامك في مجموعات تلجرام",
-    color: "bg-[#229ED9]",
-  },
+  // {
+  //   name: "جروبات تليجرام",
+  //   desc: "للوظائف بتوصلك اشعارات من خلال انضمامك في مجموعات تلجرام",
+  //   color: "bg-[#229ED9]",
+  // },
 ];
 
 export default function Home() {
@@ -48,7 +48,7 @@ export default function Home() {
             href="/signup"
             className="inline-block bg-gold text-ink font-bold px-6 py-3 rounded-sm hover:brightness-95 transition"
           >
-            جرّب مجانًا 3 أيام
+            جرّب مجانًا 
           </Link>
           <InstallButton />
         </div>
