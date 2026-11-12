@@ -1,16 +1,16 @@
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-
+ 
 const TABS = [
   { label: "أقل عروض", feed_type: "low_offers", source: null },
-  { label: "مستقل", feed_type: "low_offers", source: "مستقل" },
-  { label: "خمسات", feed_type: "low_offers", source: "خمسات" },
-  { label: "نفذلي", feed_type: "low_offers", source: "نفذلي" },
+  { label: "مستقل", feed_type: "instant", source: "مستقل" },
+  { label: "خمسات", feed_type: "instant", source: "خمسات" },
+  { label: "نفذلي", feed_type: "instant", source: "نفذلي" },
   { label: "كفيل", feed_type: "instant", source: "كفيل" },
   { label: "متعاون", feed_type: "low_offers", source: "متعاون" },
 ];
-
+ 
 const SRC_COLOR = {
   "مستقل": "52 168 130",
   "خمسات": "224 168 64",
@@ -18,7 +18,7 @@ const SRC_COLOR = {
   "كفيل": "176 110 230",
   "متعاون": "94 210 184",
 };
-
+ 
 function SourceBadge({ source }) {
   const c = SRC_COLOR[source] || "212 175 105";
   return (
@@ -30,7 +30,7 @@ function SourceBadge({ source }) {
     </span>
   );
 }
-
+ 
 function LockedCard() {
   return (
     <div className="glass relative overflow-hidden rounded-2xl p-5">
@@ -43,7 +43,7 @@ function LockedCard() {
     </div>
   );
 }
-
+ 
 function LowOffersCard({ job }) {
   return (
     <a
@@ -67,12 +67,12 @@ function LowOffersCard({ job }) {
     </a>
   );
 }
-
+ 
 function InstantCard({ job }) {
   const match = job.raw_text?.match(/https?:\/\/\S+$/);
   const url = match?.[0];
   const text = job.raw_text?.replace(/\n*https?:\/\/\S+\s*$/, "").trim();
-
+ 
   const body = (
     <>
       <div className="mb-2 flex items-center justify-between">
@@ -82,7 +82,7 @@ function InstantCard({ job }) {
       <p className="whitespace-pre-line text-sm leading-7">{text}</p>
     </>
   );
-
+ 
   return url ? (
     <a href={url} target="_blank" rel="noreferrer" className="glass glass-hover block rounded-2xl p-5">
       {body}
@@ -91,11 +91,11 @@ function InstantCard({ job }) {
     <div className="glass rounded-2xl p-5">{body}</div>
   );
 }
-
+ 
 export default function JobsFeed() {
   const [active, setActive] = useState(0);
   const [state, setState] = useState({ loading: true, access: true, jobs: [] });
-
+ 
   useEffect(() => {
     const tab = TABS[active];
     let cancelled = false;
@@ -112,9 +112,9 @@ export default function JobsFeed() {
       cancelled = true;
     };
   }, [active]);
-
+ 
   const tab = TABS[active];
-
+ 
   return (
     <div>
       <div className="-mx-1 mb-6 flex gap-2 overflow-x-auto px-1 pb-2 [scrollbar-width:none]">
@@ -132,7 +132,7 @@ export default function JobsFeed() {
           </button>
         ))}
       </div>
-
+ 
       {state.loading ? (
         <div className="grid gap-4 sm:grid-cols-2">
           {[0, 1, 2, 3].map((i) => (
@@ -154,7 +154,7 @@ export default function JobsFeed() {
           )}
         </div>
       )}
-
+ 
       {!state.access && !state.loading && (
         <div className="mt-6 text-center">
           <Link href="/subscribe" className="btn-gold">اشترك عشان تشوف كل المشاريع</Link>
@@ -163,3 +163,4 @@ export default function JobsFeed() {
     </div>
   );
 }
+ 
