@@ -1,8 +1,7 @@
 "use client";
-
 import { useEffect, useState } from "react";
 
-export default function InstallButton() {
+export default function InstallButton({ className = "btn-ghost" }) {
   const [prompt, setPrompt] = useState(null);
   const [isIOS, setIsIOS] = useState(false);
 
@@ -10,10 +9,7 @@ export default function InstallButton() {
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker.register("/sw.js").catch(() => {});
     }
-
-    const ua = window.navigator.userAgent;
-    setIsIOS(/iPad|iPhone|iPod/.test(ua));
-
+    setIsIOS(/iphone|ipad|ipod/i.test(navigator.userAgent));
     const handler = (e) => {
       e.preventDefault();
       setPrompt(e);
@@ -22,25 +18,21 @@ export default function InstallButton() {
     return () => window.removeEventListener("beforeinstallprompt", handler);
   }, []);
 
-  async function handleClick() {
+  if (!prompt && !isIOS) return null;
+
+  async function install() {
     if (prompt) {
       prompt.prompt();
       await prompt.userChoice;
       setPrompt(null);
-      return;
-    }
-    if (isIOS) {
-      alert("لإضافة التطبيق: دوس زرار المشاركة ⬆️ تحت، واختار \"Add to Home Screen\".");
+    } else {
+      alert("على الآيفون: اضغط زر المشاركة ثم «إضافة إلى الشاشة الرئيسية».");
     }
   }
 
-  if (!prompt && !isIOS) return null; // الموقع أصلًا متثبت أو مش مدعوم
-
   return (
-    <button
-      onClick={handleClick}
-      className="bg-ink text-paper text-sm font-bold px-6 py-3 rounded-sm hover:bg-teal transition"
-    >
+    <button onClick={install} className={className}>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14" /></svg>
       تحميل التطبيق
     </button>
   );

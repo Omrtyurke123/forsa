@@ -1,109 +1,101 @@
 import { supabaseServer } from "@/lib/supabaseServer";
 import { redirect } from "next/navigation";
+import Link from "next/link";
 import JobsFeed from "./JobsFeed";
 import SignOutButton from "./SignOutButton";
-import ThemeProvider, { ThemeToggleButton } from "./ThemeProvider";
 import TelegramGroups from "./TelegramGroups";
-import "./aurora-theme.css";
+import Logo from "../Logo";
 
+// ضع روابط جروبات التليجرام الحقيقية هنا
 const TELEGRAM_GROUPS = [
-  { label: "جروب أقل عروض", url: "https://t.me/+xxxxxxxxxxxxx" },
-  { label: "جروب مستقل", url: "https://t.me/+xxxxxxxxxxxxx" },
-  { label: "جروب خمسات", url: "https://t.me/+xxxxxxxxxxxxx" },
-  { label: "جروب نفذلي", url: "https://t.me/+xxxxxxxxxxxxx" },
+  { label: "جروب أقل عروض", url: "https://t.me/+REPLACE_ME" },
+  { label: "جروب مستقل", url: "https://t.me/+REPLACE_ME" },
+  { label: "جروب خمسات", url: "https://t.me/+REPLACE_ME" },
+  { label: "جروب نفذلي", url: "https://t.me/+REPLACE_ME" },
 ];
 
-export default async function DashboardPage() {
+export default async function Dashboard() {
   const supabase = supabaseServer();
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
+  const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("*")
-    .eq("id", user.id)
-    .single();
-
+  const { data: profile } = await supabase.from("profiles").select("*").eq("id", user.id).single();
   if (!profile) redirect("/login");
 
+  const now = new Date();
   const trialEnds = new Date(profile.trial_started_at);
   trialEnds.setDate(trialEnds.getDate() + (profile.trial_days ?? 3));
-  const trialDaysLeft = Math.ceil((trialEnds - new Date()) / 86400000);
 
   const subActive =
     profile.subscription_active &&
     profile.subscription_expires_at &&
-    new Date(profile.subscription_expires_at) > new Date();
-
+    new Date(profile.subscription_expires_at) > now;
   const hadSubscriptionBefore = Boolean(profile.subscription_expires_at);
 
-  let daysLeftLabel = null;
-  if (subActive) {
-    const expiresAt = new Date(profile.subscription_expires_at);
-    const subDaysLeft = Math.ceil((expiresAt - new Date()) / 86400000);
-    daysLeftLabel = `باقي ${subDaysLeft} يوم على الاشتراك`;
-  } else if (!hadSubscriptionBefore) {
-    daysLeftLabel =
-      trialDaysLeft > 0 ? `باقي ${trialDaysLeft} يوم تجربة` : "انتهت التجربة";
-  } else {
-    daysLeftLabel = "انتهى الاشتراك";
-  }
+  const daysLeft = (d) => Math.max(0, Math.ceil((d - now) / 86400000));
+  const daysLeftLabel = subActive
+    ? `باقي ${daysLeft(new Date(profile.subscription_expires_at))} يوم على الاشتراك`
+    : now < trialEnds
+    ? `باقي ${daysLeft(trialEnds)} يوم تجربة`
+    : hadSubscriptionBefore
+    ? "انتهى الاشتراك"
+    : "انتهت التجربة";
 
   return (
-    <ThemeProvider>
-      <main className="max-w-5xl mx-auto px-6 py-8">
-        <header className="flex items-center justify-between mb-6">
-          <h1 className="font-display font-bold text-2xl">أهلاً {profile.full_name || ""}</h1>
-          <div className="flex items-center gap-3">
-            <ThemeToggleButton />
-            {daysLeftLabel && (
-              <span className="text-sm text-ink/70">{daysLeftLabel}</span>
-            )}
+    <main className="min-h-screen">
+      <header className="sticky top-0 z-30 border-b border-white/5 bg-paper/70 backdrop-blur-xl">
+        <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-5 py-3.5">
+          <Logo href="/dashboard" />
+          <div className="flex items-center gap-2 sm:gap-3">
+            <span
+              className={`hidden rounded-full border px-3 py-1 text-xs font-bold sm:inline-block ${
+                subActive ? "border-teal/40 bg-teal/10 text-teal" : "border-gold/40 bg-gold/10 text-gold"
+              }`}
+            >
+              {daysLeftLabel}
+            </span>
             {!subActive && (
-              <a
-                href="/subscribe"
-                className="bg-gold text-ink text-sm font-bold px-4 py-2 rounded-sm"
-              >
-                اشترك الآن
-              </a>
+              <Link href="/subscribe" className="btn-gold !py-1.5 !px-4 text-sm">اشترك الآن</Link>
             )}
             <SignOutButton />
           </div>
-        </header>
+        </div>
+      </header>
 
-        {subActive && (
+      <div className="mx-auto max-w-5xl px-5 py-8">
+        <div className="mb-8">
+          <h1 className="text-2xl font-bold sm:text-3xl">
+            أهلاً <span className="gold-text">{profile.full_name}</span>
+          </h1>
+          <p className="mt-1 text-sm text-muted sm:hidden">{daysLeftLabel}</p>
+        </div>
+
+        {/* {subActive && (
           <TelegramGroups
             expiresLabel={new Date(profile.subscription_expires_at).toLocaleDateString("ar-EG")}
             groups={TELEGRAM_GROUPS}
           />
-        )}
-
+        )} */}
+         
         {!subActive && hadSubscriptionBefore && (
-          <div className="bg-panel border border-line rounded-sm px-4 py-3 mb-6 text-sm">
-            انتهى اشتراكك الشهري.{" "}
-            <a href="/subscribe" className="text-teal font-bold">
-              جدّد اشتراكك
-            </a>{" "}
-            عشان تكمل تشوف المشاريع كاملة.
+          <div className="mb-5 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-danger/30 bg-danger/10 px-5 py-4 text-sm">
+            <span className="text-ink/90">انتهى اشتراكك الشهري. جدّد اشتراكك عشان ترجع تشوف كل المشاريع وتدخل جروبات التليجرام.</span>
+            <Link href="/subscribe" className="btn-gold !py-1.5 !px-4 text-sm">جدّد الآن</Link>
           </div>
         )}
-
         {!subActive && !hadSubscriptionBefore && (
-          <div className="bg-panel border border-line rounded-sm px-4 py-3 mb-6 text-sm">
-            {trialDaysLeft > 0 ? (
-              <>باقي لك <b>{trialDaysLeft}</b> يوم في التجربة المجانية.</>
-            ) : (
-              <>انتهت تجربتك المجانية. <a href="/subscribe" className="text-teal font-bold">اشترك</a> عشان تكمل تشوف المشاريع كاملة.</>
-            )}
+          <div className="mb-5 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-gold/30 bg-gold/10 px-5 py-4 text-sm">
+            <span className="text-ink/90">
+              {now < trialEnds
+                ? `أنت في فترة التجربة المجانية — ${daysLeftLabel}.`
+                : "انتهت تجربتك المجانية. اشترك عشان تكمّل."}
+            </span>
+            <Link href="/subscribe" className="btn-gold !py-1.5 !px-4 text-sm">اشترك الآن</Link>
           </div>
         )}
 
         <JobsFeed />
-      </main>
-    </ThemeProvider>
+      </div>
+    </main>
   );
 }

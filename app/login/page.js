@@ -1,96 +1,60 @@
 "use client";
-
 import { Suspense, useState } from "react";
+import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { supabaseBrowser } from "@/lib/supabaseBrowser";
+import AuthShell from "../AuthShell";
 
 function LoginForm() {
   const router = useRouter();
   const params = useSearchParams();
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  async function handleSubmit(e) {
+  async function onSubmit(e) {
     e.preventDefault();
-    setError("");
     setLoading(true);
-
-    // الـ client بيتعمل هنا بس (في المتصفح، بعد الضغط) مش وقت الـ render
-    const supabase = supabaseBrowser();
-    const { error: signInError } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-
-    setLoading(false);
-
-    if (signInError) {
+    setError("");
+    const { error } = await supabaseBrowser().auth.signInWithPassword({ email, password });
+    if (error) {
       setError("الإيميل أو كلمة المرور غلط.");
+      setLoading(false);
       return;
     }
-
     const nextParam = params.get("next");
     const safeNext =
-      nextParam && nextParam.startsWith("/") && !nextParam.startsWith("//")
-        ? nextParam
-        : "/dashboard";
+      nextParam && nextParam.startsWith("/") && !nextParam.startsWith("//") ? nextParam : "/dashboard";
     router.push(safeNext);
     router.refresh();
   }
 
   return (
-    <main className="max-w-sm mx-auto px-6 py-16">
-      <h1 className="font-display font-bold text-2xl mb-8">تسجيل الدخول</h1>
-
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <label className="block">
-          <span className="text-sm text-muted block mb-1">الإيميل</span>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            className="w-full border border-line rounded-sm px-3 py-2 bg-panel"
-          />
-        </label>
-        <label className="block">
-          <span className="text-sm text-muted block mb-1">كلمة المرور</span>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            className="w-full border border-line rounded-sm px-3 py-2 bg-panel"
-          />
-        </label>
-
-        {error && <p className="text-danger text-sm">{error}</p>}
-
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full bg-ink text-paper font-bold py-3 rounded-sm hover:bg-teal transition disabled:opacity-50"
-        >
-          {loading ? "جاري الدخول..." : "دخول"}
-        </button>
+    <AuthShell
+      title="أهلاً بعودتك"
+      subtitle="سجّل دخولك وكمّل من حيث وقفت."
+      footer={<>لسه معندكش حساب؟ <Link href="/signup" className="font-bold text-gold hover:underline">ابدأ تجربتك المجانية</Link></>}
+    >
+      <form onSubmit={onSubmit} className="space-y-4">
+        <div>
+          <label className="mb-1.5 block text-sm text-muted">الإيميل</label>
+          <input className="input" type="email" dir="ltr" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" />
+        </div>
+        <div>
+          <label className="mb-1.5 block text-sm text-muted">كلمة المرور</label>
+          <input className="input" type="password" dir="ltr" required value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" />
+        </div>
+        {error && <p className="rounded-xl border border-danger/30 bg-danger/10 px-4 py-2.5 text-sm text-danger">{error}</p>}
+        <button disabled={loading} className="btn-gold w-full">{loading ? "جاري الدخول..." : "تسجيل الدخول"}</button>
       </form>
-
-      <p className="text-sm text-muted mt-6">
-        لسه معندكش حساب؟{" "}
-        <a href="/signup" className="text-teal font-bold">
-          ابدأ تجربة مجانية
-        </a>
-      </p>
-    </main>
+    </AuthShell>
   );
 }
 
 export default function LoginPage() {
   return (
-    <Suspense fallback={null}>
+    <Suspense>
       <LoginForm />
     </Suspense>
   );

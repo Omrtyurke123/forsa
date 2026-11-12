@@ -1,120 +1,78 @@
 "use client";
-
 import { useState } from "react";
+import Link from "next/link";
+import AuthShell from "../AuthShell";
+
+// ضع رقم التحويل الحقيقي هنا
+const TRANSFER_NUMBER = "01xxxxxxxxx";
 
 export default function SubscribePage() {
-  const [method, setMethod] = useState("vodafone_cash");
-  const [senderPhone, setSenderPhone] = useState("");
-  const [transactionRef, setTransactionRef] = useState("");
-  const [file, setFile] = useState(null);
-  const [status, setStatus] = useState("idle"); // idle | sending | sent | error
+  const [status, setStatus] = useState("idle");
+  const [error, setError] = useState("");
 
-  async function handleSubmit(e) {
+  async function onSubmit(e) {
     e.preventDefault();
     setStatus("sending");
-
-    const formData = new FormData();
-    formData.set("method", method);
-    formData.set("sender_phone", senderPhone);
-    formData.set("transaction_ref", transactionRef);
-    if (file) formData.set("proof", file);
-
-    const res = await fetch("/api/payments", { method: "POST", body: formData });
-
-    setStatus(res.ok ? "sent" : "error");
+    setError("");
+    const res = await fetch("/api/payments", { method: "POST", body: new FormData(e.target) });
+    if (res.ok) setStatus("sent");
+    else {
+      const d = await res.json().catch(() => ({}));
+      setError(d.error || "حصلت مشكلة، جرّب تاني.");
+      setStatus("error");
+    }
   }
 
   if (status === "sent") {
     return (
-      <main className="max-w-md mx-auto px-6 py-16 text-center">
-        <h1 className="font-display font-bold text-2xl mb-2">تم استلام طلبك</h1>
-        <p className="text-muted">
-          هنراجع عملية التحويل ونفعّل اشتراكك خلال ساعات. هتوصلك رسالة على
-          الإيميل بعد التفعيل.
-        </p>
-        <a href="/dashboard" className="inline-block mt-6 text-teal font-bold">
-          رجوع للمنصة
-        </a>
-      </main>
+      <AuthShell title="تم استلام طلبك">
+        <div className="text-center">
+          <div className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-teal/10 text-3xl text-teal ring-1 ring-teal/40">✓</div>
+          <p className="mt-5 leading-8 text-muted">هنراجع التحويل ونفعّل اشتراكك في أقرب وقت.</p>
+          <Link href="/dashboard" className="btn-gold mt-6">رجوع للوحة التحكم</Link>
+        </div>
+      </AuthShell>
     );
   }
 
   return (
-    <main className="max-w-md mx-auto px-6 py-16">
-      <h1 className="font-display font-bold text-2xl mb-1">الاشتراك الشهري</h1>
-      <p className="text-muted text-sm mb-8">25 جنيه / شهر .</p>
-
-      <div className="bg-panel border border-line rounded-sm p-4 mb-6 text-sm leading-relaxed">
-        <p className="font-bold mb-1">حوّل المبلغ على:</p>
-        <p>انستاباي: <b dir="ltr">01144842231</b></p>
-        <p className="text-muted mt-2">
-          بعد التحويل، املأ البيانات تحت وارفع صورة إيصال التحويل.
-        </p>
+    <AuthShell title="فعّل اشتراكك" subtitle="حوّل المبلغ ثم ارفع إثبات التحويل، وهنفعّل حسابك بعد المراجعة.">
+      <div className="mb-6 rounded-2xl border border-gold/30 bg-gradient-to-br from-gold/15 to-transparent p-5">
+        <div className="flex items-end justify-between">
+          <div>
+            <div className="text-xs text-muted">الاشتراك الشهري</div>
+            <div className="gold-text font-display text-4xl font-bold">99 <span className="text-base">جنيه / شهر</span></div>
+          </div>
+          <span className="eyebrow !text-xs">إلغاء في أي وقت</span>
+        </div>
+        <div className="mt-4 border-t border-white/10 pt-3 text-sm text-muted">
+          حوّل على الرقم: <b dir="ltr" className="text-ink">{TRANSFER_NUMBER}</b>
+        </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <label className="block">
-          <span className="text-sm text-muted block mb-1">طريقة التحويل</span>
-          <select
-            value={method}
-            onChange={(e) => setMethod(e.target.value)}
-            className="w-full border border-line rounded-sm px-3 py-2 bg-panel"
-          >
-            {/* <option value="vodafone_cash">فودافون كاش</option> */}
-            <option value="instapay">انستاباي</option>
+      <form onSubmit={onSubmit} className="space-y-4">
+        <div>
+          <label className="mb-1.5 block text-sm text-muted">طريقة الدفع</label>
+          <select name="method" className="input" required defaultValue="vodafone_cash">
+            <option value="vodafone_cash">فودافون كاش</option>
+            <option value="instapay">إنستا باي</option>
           </select>
-        </label>
-
-        <label className="block">
-          <span className="text-sm text-muted block mb-1">رقمك اللي حوّلت منه</span>
-          <input
-            value={senderPhone}
-            onChange={(e) => setSenderPhone(e.target.value)}
-            required
-            className="w-full border border-line rounded-sm px-3 py-2 bg-panel"
-          />
-        </label>
-
-        <label className="block">
-          <span className="text-sm text-muted block mb-1">
-            رقم العملية (اختياري)
-          </span>
-          <input
-            value={transactionRef}
-            onChange={(e) => setTransactionRef(e.target.value)}
-            className="w-full border border-line rounded-sm px-3 py-2 bg-panel"
-          />
-        </label>
-
-        <label className="block">
-          <span className="text-sm text-muted block mb-1">صورة إيصال التحويل</span>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={(e) => setFile(e.target.files?.[0] || null)}
-            required
-            className="w-full text-sm"
-          />
-        </label>
-
-        {status === "error" && (
-          <p className="text-danger text-sm">حصل خطأ، جرّب تاني.</p>
-        )}
-
-        <button
-          type="submit"
-          disabled={status === "sending"}
-          className="w-full bg-ink text-paper font-bold py-3 rounded-sm hover:bg-teal transition disabled:opacity-50"
-        >
-          {status === "sending" ? "جاري الإرسال..." : "إرسال الطلب"}
-        </button>
+        </div>
+        <div>
+          <label className="mb-1.5 block text-sm text-muted">الرقم اللي حوّلت منه</label>
+          <input name="sender_phone" className="input" dir="ltr" required placeholder="01xxxxxxxxx" />
+        </div>
+        <div>
+          <label className="mb-1.5 block text-sm text-muted">رقم العملية (اختياري)</label>
+          <input name="transaction_ref" className="input" dir="ltr" />
+        </div>
+        <div>
+          <label className="mb-1.5 block text-sm text-muted">صورة إثبات التحويل</label>
+          <input name="proof" type="file" accept="image/*" required className="input file:ml-3 file:rounded-full file:border-0 file:bg-gold/15 file:px-4 file:py-1.5 file:text-sm file:font-bold file:text-gold" />
+        </div>
+        {status === "error" && <p className="rounded-xl border border-danger/30 bg-danger/10 px-4 py-2.5 text-sm text-danger">{error}</p>}
+        <button disabled={status === "sending"} className="btn-gold w-full">{status === "sending" ? "جاري الإرسال..." : "إرسال الطلب"}</button>
       </form>
-      <p className="text-xs text-ink/50 mt-6 text-center">
-        باستخدامك المنصة أو اشتراكك، إنت موافق على{" "}
-        <a href="/terms" className="text-teal underline">شروط الاستخدام</a>{" "}
-        و{" "}
-        <a href="/privacy" className="text-teal underline">سياسة الخصوصية</a>.
-      </p>
-    </main>
+    </AuthShell>
   );
 }

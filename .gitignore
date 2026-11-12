@@ -1,5 +1,10 @@
-node_modules
+﻿node_modules
 .next
 .env
 .env.local
-app/local-admin/
+.env*.local
+.vercel
+*.log
+
+.history
+.vscode
