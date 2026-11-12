@@ -18,6 +18,7 @@ module.exports = {
         khamsat: c("khamsat"),
         nafezly: c("nafezly"),
         kafiil: c("kafiil"),
+        veil: c("veil"),
       },
       fontFamily: {
         display: ["var(--font-display)", "sans-serif"],

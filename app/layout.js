@@ -1,5 +1,6 @@
 import "./globals.css";
 import { IBM_Plex_Sans_Arabic, Tajawal } from "next/font/google";
+import ThemeToggle from "./ThemeToggle";
 
 const display = IBM_Plex_Sans_Arabic({
   subsets: ["arabic"],
@@ -22,10 +23,25 @@ export const metadata = {
 
 export const viewport = { themeColor: "#0A0C11" };
 
+// يطبّق الثيم المحفوظ قبل أول رسم للصفحة، عشان ميحصلش وميض
+const themeScript = `try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark"){document.documentElement.dataset.theme=t}else{document.documentElement.dataset.theme="dark"}}catch(e){document.documentElement.dataset.theme="dark"}`;
+
 export default function RootLayout({ children }) {
   return (
-    <html lang="ar" dir="rtl" className={`${display.variable} ${body.variable}`}>
-      <body className="bg-paper text-ink font-body min-h-screen">{children}</body>
+    <html
+      lang="ar"
+      dir="rtl"
+      data-theme="dark"
+      suppressHydrationWarning
+      className={`${display.variable} ${body.variable}`}
+    >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
+      <body className="bg-paper text-ink font-body min-h-screen">
+        {children}
+        <ThemeToggle />
+      </body>
     </html>
   );
 }

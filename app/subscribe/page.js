@@ -45,7 +45,7 @@ export default function SubscribePage() {
           </div>
           <span className="eyebrow !text-xs">إلغاء في أي وقت</span>
         </div>
-        <div className="mt-4 border-t border-white/10 pt-3 text-sm text-muted">
+        <div className="mt-4 border-t border-veil/10 pt-3 text-sm text-muted">
           حوّل على الرقم: <b dir="ltr" className="text-ink">{TRANSFER_NUMBER}</b>
         </div>
       </div>

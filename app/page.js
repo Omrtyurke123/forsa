@@ -21,7 +21,7 @@ export default function Home() {
   return (
     <main className="relative overflow-hidden">
       {/* header */}
-      <header className="sticky top-0 z-30 border-b border-white/5 bg-paper/70 backdrop-blur-xl">
+      <header className="sticky top-0 z-30 border-b border-veil/5 bg-paper/70 backdrop-blur-xl">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-3.5">
           <Logo />
           <nav className="flex items-center gap-2 sm:gap-3">
@@ -63,7 +63,7 @@ export default function Home() {
         {/* <p className="mt-5 text-sm text-muted">من غير بطاقة ائتمان • بعدها 49 جنيه في الشهر</p> */}
 
         {/* stat strip */}
-        <div className="glass animate-rise mx-auto mt-16 grid max-w-2xl grid-cols-3 divide-x divide-x-reverse divide-white/10 rounded-2xl py-5 [animation-delay:.32s]">
+        <div className="glass animate-rise mx-auto mt-16 grid max-w-2xl grid-cols-3 divide-x divide-x-reverse divide-veil/10 rounded-2xl py-5 [animation-delay:.32s]">
           {[
             ["5", "منصات في مكان واحد"],
             ["شغل مستمر", "اكتر من 20 عرض ف الساعة"],
@@ -127,7 +127,7 @@ export default function Home() {
             </div>
             <ul className="grid gap-3 sm:grid-cols-2">
               {perks.map((p) => (
-                <li key={p.t} className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+                <li key={p.t} className="rounded-2xl border border-veil/10 bg-veil/[0.03] p-5">
                   <div className="flex items-center gap-2 font-display font-bold">
                     <span className="h-1.5 w-1.5 rounded-full bg-gold" />
                     {p.t}
@@ -147,7 +147,7 @@ export default function Home() {
         <Link href="/signup" className="btn-gold mt-8 text-base">جرّب مجانًا </Link>
       </section>
 
-      <footer className="border-t border-white/5">
+      <footer className="border-t border-veil/5">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-5 py-8 text-center text-sm text-muted sm:flex-row sm:text-right">
           <p>فرصة — منصة غير رسمية، بتجمّع وتعرض إعلانات منشورة على منصات العمل الحر العامة.</p>
           <div className="flex gap-5">

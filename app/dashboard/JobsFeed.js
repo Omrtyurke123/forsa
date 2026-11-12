@@ -35,9 +35,9 @@ function LockedCard() {
   return (
     <div className="glass relative overflow-hidden rounded-2xl p-5">
       <div className="select-none blur-sm">
-        <div className="h-4 w-2/3 rounded bg-white/20" />
-        <div className="mt-3 h-3 w-full rounded bg-white/10" />
-        <div className="mt-2 h-3 w-4/5 rounded bg-white/10" />
+        <div className="h-4 w-2/3 rounded bg-veil/20" />
+        <div className="mt-3 h-3 w-full rounded bg-veil/10" />
+        <div className="mt-2 h-3 w-4/5 rounded bg-veil/10" />
       </div>
       <div className="absolute inset-0 grid place-items-center bg-paper/40 text-sm text-gold">🔒 للمشتركين</div>
     </div>
@@ -59,7 +59,7 @@ function LowOffersCard({ job }) {
       {job.description && (
         <p className="mt-2 line-clamp-2 text-sm leading-7 text-muted">{job.description}</p>
       )}
-      <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1 border-t border-white/10 pt-3 text-xs text-muted">
+      <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1 border-t border-veil/10 pt-3 text-xs text-muted">
         {job.budget && <span className="font-bold text-gold">{job.budget}</span>}
         {job.offers_count != null && <span>{job.offers_count} عروض</span>}
         {job.posted_label && <span className="mr-auto">{job.posted_label}</span>}
@@ -124,8 +124,8 @@ export default function JobsFeed() {
             onClick={() => setActive(i)}
             className={`shrink-0 rounded-full border px-5 py-2 text-sm font-bold transition ${
               i === active
-                ? "border-transparent bg-gradient-to-br from-[#f3dca3] via-[#d4af69] to-[#b98a3e] text-paper shadow-gold"
-                : "border-white/10 bg-white/[0.03] text-muted hover:border-gold/40 hover:text-ink"
+                ? "border-transparent bg-gradient-to-br from-[#f3dca3] via-[#d4af69] to-[#b98a3e] text-[rgb(var(--on-gold))] shadow-gold"
+                : "border-veil/10 bg-veil/[0.03] text-muted hover:border-gold/40 hover:text-ink"
             }`}
           >
             {t.label}

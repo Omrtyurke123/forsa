@@ -10,7 +10,7 @@ export default function SignOutButton() {
     router.refresh();
   }
   return (
-    <button onClick={signOut} className="rounded-full px-3 py-1.5 text-sm text-muted transition hover:bg-white/5 hover:text-ink">
+    <button onClick={signOut} className="rounded-full px-3 py-1.5 text-sm text-muted transition hover:bg-veil/5 hover:text-ink">
       خروج
     </button>
   );

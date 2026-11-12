@@ -43,7 +43,7 @@ export default async function Dashboard() {
 
   return (
     <main className="min-h-screen">
-      <header className="sticky top-0 z-30 border-b border-white/5 bg-paper/70 backdrop-blur-xl">
+      <header className="sticky top-0 z-30 border-b border-veil/5 bg-paper/70 backdrop-blur-xl">
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-5 py-3.5">
           <Logo href="/dashboard" />
           <div className="flex items-center gap-2 sm:gap-3">

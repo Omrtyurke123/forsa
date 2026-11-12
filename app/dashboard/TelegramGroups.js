@@ -9,7 +9,7 @@ export default function TelegramGroups({ expiresLabel, groups }) {
       <button
         onClick={() => setOpen(!open)}
         aria-expanded={open}
-        className="flex w-full items-center justify-between gap-4 px-5 py-4 text-right transition hover:bg-white/[0.03]"
+        className="flex w-full items-center justify-between gap-4 px-5 py-4 text-right transition hover:bg-veil/[0.03]"
       >
         <span className="flex items-center gap-3">
           <span className="grid h-11 w-11 place-items-center rounded-xl bg-[#229ED9]/15 text-[#4cc2f5] ring-1 ring-[#229ED9]/40">
@@ -29,7 +29,7 @@ export default function TelegramGroups({ expiresLabel, groups }) {
       </button>
 
       {open && (
-        <div className="border-t border-white/10 px-5 pb-5 pt-4">
+        <div className="border-t border-veil/10 px-5 pb-5 pt-4">
           <p className="mb-4 text-sm text-muted">
             اشتراكك فعّال لحد <b className="text-gold">{expiresLabel}</b>.
           </p>
